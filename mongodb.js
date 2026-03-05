@@ -343,3 +343,23 @@ db.product.updateOne({
         category : "food"
     }
 })
+
+// update product set tags = ["food"] where category = "food" and tags is null
+db.product.updateMany({
+    $and : [
+        {
+            category : {
+                $eq : "food"
+            }
+        },
+        {
+            tags : {
+                $exists : false
+            }
+        }
+    ]
+},{
+    $set : {
+        tags : ["food"]
+    }
+})
