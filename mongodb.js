@@ -12,7 +12,7 @@ db.mahasiswa.insertOne({
 db.createCollection("dosen")
 
 // lihat collection
-show collections
+// show collections
 
 // --------------------------------------------------
 
@@ -207,7 +207,7 @@ db.product.find({
     }
 }) 
 
-// 
+// array querry operator
 db.product.insertMany([
     {
         name : "logitech",
@@ -223,3 +223,123 @@ db.product.insertMany([
     }
 ])
 
+// select * from product where tags = "logitech" and tags = "mouse"
+db.product.find({
+    tags : {
+        $all : ["logitech", "mouse"]
+    }
+})
+
+// projection operator
+
+// parameter kedua setelah querry
+// db.<collection>.find(querry,projection)
+
+// select _id,name,category from product
+
+db.product.find({
+    category : {
+        $exists : true
+    }
+},{
+    name : 1,
+    category : 1
+})
+
+// select _id, name, category,price from product
+db.product.find({},{
+    tags : 0
+})
+
+// projection operator (khususnya array)
+
+db.product.find({}, {
+    name : 1,
+    tags : {
+        $elemMatch : {
+            $in : ["logitech", "mouse","hp"]
+        }
+    }
+})
+
+// projection operator $(mengambil 1 data saja)
+db.product.find({
+    tags : {
+        $exists : true
+    }
+},{
+    name : 1, 
+    "tags.$" : 1 
+})
+
+// projection operator $(mengambil 2 data teratas)
+
+db.product.find({
+    tags : {
+        $exists : true
+    }
+},{
+    name : 1, 
+    tags : {
+        $slice : 2
+    } 
+})
+
+// query modifier (modifikasi hasil querry)
+
+// count () : mengambil jumblah data hasil querry
+// limit(size) : membatasi jumlah data yang didapat dari query
+// skip(size) : menghiraukan data perhama hasil query
+// sort(query) : mengurutkan data hasil query-> 1 ascending , -1 descending
+
+// select count(*) from product
+db.product.find({}).count()
+
+// select * from product limit 4
+db.product.find({}).limit(4)
+
+// select * from product offset 2
+db.product.find({}).skip(2).limit(4)
+
+// select * from product order by category asc, name desc
+db.product.find({}).sort({
+    category : 1,
+    name : -1
+})
+
+
+// -----------------------------------------------------
+// update document
+
+// updateOne() : mengubah satu document
+// updateMany() : mengubah banyak document sekaligus
+// replaceOne() : mengubah total suatu document dg document baru
+
+// db.customers.update(
+//     {},  -> filter
+//     {},  -> update
+//     {}   -> options
+// )
+
+
+// update price set price = 10000, category = "food" where name = "cireng"
+db.product.updateOne({
+    name : {
+        $eq : "cireng"
+    }
+},{
+    $set : {
+        price : 10000
+    }
+})
+
+db.product.updateOne({
+    name : {
+        $eq : "cireng"
+    }
+},{
+    $set : {
+        price : 10000,
+        category : "food"
+    }
+})
