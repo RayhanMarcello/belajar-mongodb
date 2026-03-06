@@ -321,6 +321,8 @@ db.product.find({}).sort({
 //     {}   -> options
 // )
 
+// menggunakan operator $set
+
 
 // update price set price = 10000, category = "food" where name = "cireng"
 db.product.updateOne({
@@ -363,3 +365,24 @@ db.product.updateMany({
         tags : ["food"]
     }
 })
+
+// replace
+
+db.product.replaceOne({
+    $and : [
+        {
+            name : {$eq : "indomie"}
+        },{
+            qty : 5
+        }
+    ]
+}, {
+        name : "indomie kari ayam",
+        qty : 100,
+        price : 20000
+})
+
+// field update operator
+
+
+
