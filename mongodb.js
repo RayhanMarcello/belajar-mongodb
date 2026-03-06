@@ -434,3 +434,80 @@ db.product.updateMany({
     }
 })
 
+// update all element of array
+
+db.product.updateMany({
+    ratings : 90
+},{
+    $set : {
+        "ratings.$[]" : 100
+    }
+})
+
+// update berasarkan identifier
+
+db.product.updateMany({},{
+    $set : {
+        "ratings.$[elements]" : 100
+    }
+},{
+        arrayFilters : [
+            {
+                elements : {
+                    $gte : 80
+                }
+            }
+        ]
+    }
+)
+
+// update array index <index>
+
+db.product.updateMany({},{
+    $set : {
+        "ratings.0" :0
+    }
+})
+
+// ------------------------------------------------------------------------------------------
+// delete document function
+// db.<collections>.deleteOne/deleteMany(querry)
+
+db.customers.insertOne({
+    name : "spamer"
+})
+
+db.customers.deleteOne({
+    name : "spammer"
+})
+
+// ------------------------------------------------------------------------------------------
+// bulk write operation
+// melakukan operasi write (crud) sekali banyak sekaligus
+
+// db.collections.bulkWrite()
+
+db.customers.bulkWrite([
+    {
+        insertOne : {
+            document : {
+                _id : "rayhan",
+                name : "rayhan marcello"
+            }
+        }
+    },
+    {
+        updateMany : {
+            filter : {
+                _id : {
+                    $in : ["rayhan", "marcello"]
+                }
+            },
+            update : {
+                $set : {
+                    name : "rayhan marcello ananda"
+                }
+            }
+        }
+    }
+])
