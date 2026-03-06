@@ -384,5 +384,53 @@ db.product.replaceOne({
 
 // field update operator
 
+// inc : menaikan nilai 
 
+db.product.updateMany({}, {
+    $inc : {
+        qty : 10
+    }
+})
+
+// rename : mengubah nama field suatu dokments
+
+db.product.updateOne({},{
+    $rename : {
+        name : "name-product"
+    }
+})
+
+// currentDate : mengubah waktu saat ini diupdate
+
+db.product.updateMany({}, {
+    $currentDate : {
+        lastModifiedDate : {
+            $type : "date"
+        }
+    }
+})
+
+
+// array update operator
+
+//  $ : mengupdate array pertama sesuai kondisi querry
+//  $[] : mengupdate semua arry
+//  $[<identiver>] : mengupdate semua aray yg sesuai kondisi arryFilter
+// <index> : mengupdate array sesuai dengan index
+
+db.product.updateMany({},{
+    $set : {
+        ratings : [90,80,70]
+    }
+})
+
+
+// update array dg operator $
+db.product.updateMany({
+    ratings : {$eq : 70}
+},{
+    $set : {
+        "ratings.$" : 60
+    }
+})
 
