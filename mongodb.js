@@ -511,3 +511,61 @@ db.customers.bulkWrite([
         }
     }
 ])
+
+// --------------------------------------------------
+// index (sama kyk di sql algo btree)
+// create index func
+
+// db.collection.createIndex() -> membuat index di collection
+// db.collection.getIndexes() -> melihat semua index di collection
+// db.collection.dropIndex() -> menghapus index di collection
+
+// secara default mongodb sudah mengindex field_id
+
+// single indexes (ascending : 1 , descending : -1)
+
+db.product.createIndex({
+    category : 1
+})
+
+// drop index 
+
+db.product.dropIndex("category_1")
+
+// compound indexes (index lebih dari 1 field)
+
+// create index at price and tags in prod
+
+db.product.createIndex({
+    price : 1,
+    tags : 1
+})
+
+db.product.find({
+    price : {
+        $gte : 10000
+    },
+    tags : "food"
+})
+
+// text index -> digunakan untuk pencarian data bertipe string
+
+db.product.createIndex({
+    name : "text",
+    category : "text",
+    tags : "text"
+},{
+    weights : {
+        name : 10,
+        category : 5,
+        tags: 1
+    }
+})
+// search product with text "mie"
+
+db.product.find({
+    $text : {
+        $search : "mie"
+    }
+})
+
